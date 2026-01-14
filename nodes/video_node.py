@@ -129,6 +129,7 @@ class KlingNode:
             },
             "optional": {
                 "image": ("IMAGE",),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -136,7 +137,9 @@ class KlingNode:
     FUNCTION = "generate_video"
     CATEGORY = "FAL/VideoGeneration"
 
-    def generate_video(self, prompt, duration, aspect_ratio, image=None):
+    def generate_video(self, prompt, duration, aspect_ratio, image=None, aspect_ratio_override=None):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         arguments = {
             "prompt": prompt,
             "duration": duration,
@@ -180,6 +183,7 @@ class KlingPro10Node:
             "optional": {
                 "image": ("IMAGE",),
                 "tail_image": ("IMAGE",),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -188,8 +192,10 @@ class KlingPro10Node:
     CATEGORY = "FAL/VideoGeneration"
 
     def generate_video(
-        self, prompt, duration, aspect_ratio, image=None, tail_image=None
+        self, prompt, duration, aspect_ratio, image=None, tail_image=None, aspect_ratio_override=None
     ):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         arguments = {
             "prompt": prompt,
             "duration": duration,
@@ -244,6 +250,7 @@ class KlingPro16Node:
             "optional": {
                 "image": ("IMAGE",),
                 "tail_image": ("IMAGE",),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -252,8 +259,10 @@ class KlingPro16Node:
     CATEGORY = "FAL/VideoGeneration"
 
     def generate_video(
-        self, prompt, duration, aspect_ratio, image=None, tail_image=None
+        self, prompt, duration, aspect_ratio, image=None, tail_image=None, aspect_ratio_override=None
     ):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         arguments = {
             "prompt": prompt,
             "duration": duration,
@@ -307,6 +316,7 @@ class KlingMasterNode:
             },
             "optional": {
                 "image": ("IMAGE",),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -314,7 +324,9 @@ class KlingMasterNode:
     FUNCTION = "generate_video"
     CATEGORY = "FAL/VideoGeneration"
 
-    def generate_video(self, prompt, duration, aspect_ratio, image=None):
+    def generate_video(self, prompt, duration, aspect_ratio, image=None, aspect_ratio_override=None):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         arguments = {
             "prompt": prompt,
             "duration": duration,
@@ -403,6 +415,7 @@ class LumaDreamMachineNode:
                 "image": ("IMAGE",),
                 "end_image": ("IMAGE",),
                 "loop": ("BOOLEAN", {"default": False}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -411,8 +424,10 @@ class LumaDreamMachineNode:
     CATEGORY = "FAL/VideoGeneration"
 
     def generate_video(
-        self, prompt, mode, aspect_ratio, image=None, end_image=None, loop=False
+        self, prompt, mode, aspect_ratio, image=None, end_image=None, loop=False, aspect_ratio_override=None
     ):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         arguments = {
             "prompt": prompt,
             "aspect_ratio": aspect_ratio,
@@ -468,13 +483,18 @@ class Veo2ImageToVideoNode:
                 ),
                 "duration": (["5s", "6s", "7s", "8s"], {"default": "5s"}),
             },
+            "optional": {
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
+            },
         }
 
     RETURN_TYPES = ("STRING",)
     FUNCTION = "generate_video"
     CATEGORY = "FAL/VideoGeneration"
 
-    def generate_video(self, prompt, image, aspect_ratio, duration):
+    def generate_video(self, prompt, image, aspect_ratio, duration, aspect_ratio_override=None):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         try:
             image_url = ImageUtils.upload_image(image)
             if not image_url:
@@ -631,6 +651,7 @@ class WanVACEVideoEditNode:
                 "aspect_ratio": (["auto", "16:9", "9:16", "1:1"], {"default": "auto"}),
                 "auto_downsample_min_fps": ("INT", {"default": 15, "min": 1, "max": 60}),
                 "enable_safety_checker": ("BOOLEAN", {"default": True}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -652,7 +673,10 @@ class WanVACEVideoEditNode:
         aspect_ratio="auto",
         auto_downsample_min_fps=15,
         enable_safety_checker=True,
+        aspect_ratio_override=None,
     ):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         try:
             if video is None and input_video_url is "":
                 return ApiHandler.handle_video_generation_error(
@@ -1051,6 +1075,7 @@ class InfinityStarTextToVideoNode:
                 "tau_video": ("FLOAT", {"default": 0.4, "min": 0.0, "max": 2}),
                 "enhance_prompt": ("BOOLEAN", {"default": True}),
                 "seed": ("INT", {"default": 42}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -1068,7 +1093,10 @@ class InfinityStarTextToVideoNode:
         aspect_ratio="16:9",
         guidance_scale=7.5,
         tau_video=0.4,
+        aspect_ratio_override=None,
     ):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         try:
             arguments={
                     "prompt": prompt,
@@ -1115,6 +1143,10 @@ class CombinedVideoGenerationNode:
                 "enable_luma": ("BOOLEAN", {"default": True}),
                 "enable_veo2": ("BOOLEAN", {"default": True}),
                 "enable_wanpro": ("BOOLEAN", {"default": True}),
+            },
+            "optional": {
+                "kling_luma_aspect_ratio_override": ("STRING", {"forceInput": True}),
+                "veo2_aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -1381,7 +1413,13 @@ class CombinedVideoGenerationNode:
         enable_luma,
         enable_veo2,
         enable_wanpro,
+        kling_luma_aspect_ratio_override=None,
+        veo2_aspect_ratio_override=None,
     ):
+        if kling_luma_aspect_ratio_override:
+            kling_luma_aspect_ratio = kling_luma_aspect_ratio_override
+        if veo2_aspect_ratio_override:
+            veo2_aspect_ratio = veo2_aspect_ratio_override
         try:
             # Upload image once to be used by all services
             image_url = ImageUtils.upload_image(image)
@@ -1695,6 +1733,7 @@ class SeedanceTextToVideoNode:
             },
             "optional": {
                 "seed": ("INT", {"default": -1, "min": -1, "max": 2147483647}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -1702,7 +1741,9 @@ class SeedanceTextToVideoNode:
     FUNCTION = "generate_video"
     CATEGORY = "FAL/VideoGeneration"
 
-    def generate_video(self, prompt, aspect_ratio, resolution, duration, camera_fixed, seed=-1):
+    def generate_video(self, prompt, aspect_ratio, resolution, duration, camera_fixed, seed=-1, aspect_ratio_override=None):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         try:
             arguments = {
                 "prompt": prompt,
@@ -1741,6 +1782,7 @@ class Veo3Node:
                 "enhance_prompt": ("BOOLEAN", {"default": True}),
                 "seed": ("INT", {"default": -1, "min": -1, "max": 2147483647}),
                 "generate_audio": ("BOOLEAN", {"default": True}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -1757,7 +1799,10 @@ class Veo3Node:
         enhance_prompt=True,
         seed=-1,
         generate_audio=True,
+        aspect_ratio_override=None,
     ):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         arguments = {
             "prompt": prompt,
             "aspect_ratio": aspect_ratio,
@@ -1905,6 +1950,7 @@ class FalSora2ProImageToVideo:
                 "aspect_ratio": (["auto", "9:16", "16:9"], {"default": "auto"}),
                 "duration": ([4, 8, 12], {"default": 4}),
                 "delete_video": ("BOOLEAN", {"default": True}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -1912,7 +1958,9 @@ class FalSora2ProImageToVideo:
     FUNCTION = "generate_video"
     CATEGORY = "FAL/VideoGeneration"
 
-    def generate_video(self, prompt, image, resolution="auto", aspect_ratio="auto", duration=4, delete_video=True):
+    def generate_video(self, prompt, image, resolution="auto", aspect_ratio="auto", duration=4, delete_video=True, aspect_ratio_override=None):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         try:
             image_url = ImageUtils.upload_image(image)
             if not image_url:
@@ -1954,6 +2002,7 @@ class FalVeo31FirstLastFrameToVideo:
                 "aspect_ratio": (["auto", "9:16", "16:9", "1:1"], {"default": "auto"}),
                 "resolution": (["720p", "1080p"], {"default": "720p"}),
                 "generate_audio": ("BOOLEAN", {"default": True}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -1961,7 +2010,9 @@ class FalVeo31FirstLastFrameToVideo:
     FUNCTION = "generate_video"
     CATEGORY = "FAL/VideoGeneration"
 
-    def generate_video(self, prompt, first_frame, last_frame=None, duration="8s", aspect_ratio="auto", resolution="720p", generate_audio=True):
+    def generate_video(self, prompt, first_frame, last_frame=None, duration="8s", aspect_ratio="auto", resolution="720p", generate_audio=True, aspect_ratio_override=None):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         try:
             first_frame_url = ImageUtils.upload_image(first_frame)
             if not first_frame_url:
@@ -2022,6 +2073,7 @@ class FalVeo31FastFirstLastFrameToVideo:
                 "aspect_ratio": (["auto", "9:16", "16:9", "1:1"], {"default": "auto"}),
                 "resolution": (["720p", "1080p"], {"default": "720p"}),
                 "generate_audio": ("BOOLEAN", {"default": True}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -2029,7 +2081,9 @@ class FalVeo31FastFirstLastFrameToVideo:
     FUNCTION = "generate_video"
     CATEGORY = "FAL/VideoGeneration"
 
-    def generate_video(self, prompt, first_frame, last_frame=None, duration="8s", aspect_ratio="auto", resolution="720p", generate_audio=True):
+    def generate_video(self, prompt, first_frame, last_frame=None, duration="8s", aspect_ratio="auto", resolution="720p", generate_audio=True, aspect_ratio_override=None):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         try:
             first_frame_url = ImageUtils.upload_image(first_frame)
             if not first_frame_url:

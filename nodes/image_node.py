@@ -694,6 +694,7 @@ class FluxUltra:
             },
             "optional": {
                 "seed": ("INT", {"default": -1}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -711,7 +712,10 @@ class FluxUltra:
         raw,
         sync_mode,
         seed=-1,
+        aspect_ratio_override=None,
     ):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         arguments = {
             "prompt": prompt,
             "aspect_ratio": aspect_ratio,
@@ -1138,6 +1142,7 @@ class FluxProKontext:
                 "output_format": (["jpeg", "png"], {"default": "jpeg"}),
                 "sync_mode": ("BOOLEAN", {"default": False}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 2**32 - 1}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -1157,7 +1162,10 @@ class FluxProKontext:
         output_format="jpeg",
         sync_mode=False,
         seed=0,
+        aspect_ratio_override=None,
     ):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         # Upload the input image to get URL
         image_url = ImageUtils.upload_image(image)
         if not image_url:
@@ -1229,6 +1237,7 @@ class FluxProKontextMulti:
                 "output_format": (["jpeg", "png"], {"default": "jpeg"}),
                 "sync_mode": ("BOOLEAN", {"default": False}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 2**32 - 1}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -1251,7 +1260,10 @@ class FluxProKontextMulti:
         output_format="jpeg",
         sync_mode=False,
         seed=0,
+        aspect_ratio_override=None,
     ):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         # Upload all provided images
         image_urls = []
 
@@ -1333,6 +1345,7 @@ class FluxProKontextTextToImage:
                 "output_format": (["jpeg", "png"], {"default": "jpeg"}),
                 "sync_mode": ("BOOLEAN", {"default": False}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 2**32 - 1}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -1351,7 +1364,10 @@ class FluxProKontextTextToImage:
         output_format="jpeg",
         sync_mode=False,
         seed=0,
+        aspect_ratio_override=None,
     ):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         # Dynamic endpoint selection based on max_quality toggle
         endpoint = (
             "fal-ai/flux-pro/kontext/max/text-to-image"
@@ -1708,6 +1724,7 @@ class NanoBananaTextToImage:
                 "num_images": ("INT", {"default": 1, "min": 1, "max": 4}),
                 "output_format": (["jpeg", "png"], {"default": "png"}),
                 "sync_mode": ("BOOLEAN", {"default": False}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -1722,7 +1739,10 @@ class NanoBananaTextToImage:
         num_images=1,
         output_format="png",
         sync_mode=False,
+        aspect_ratio_override=None,
     ):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         arguments = {
             "prompt": prompt,
             "aspect_ratio": aspect_ratio,
@@ -1808,6 +1828,7 @@ class NanoBananaPro:
                 "output_format": (["jpeg", "png", "webp"], {"default": "png"}),
                 "resolution": (["1K", "2K", "4K"], {"default": "1K"}),
                 "sync_mode": ("BOOLEAN", {"default": False}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -1824,7 +1845,10 @@ class NanoBananaPro:
         output_format="png",
         resolution="1K",
         sync_mode=False,
+        aspect_ratio_override=None,
     ):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         # Prepare image URLs from optional input, limit to 14 images max
         if images is not None and hasattr(images, 'shape') and len(images.shape) == 4 and images.shape[0] > 14:
             # If batch has more than 14 images, take only first 14
@@ -1874,6 +1898,7 @@ class ReveTextToImage:
                 ),
                 "num_images": ("INT", {"default": 1, "min": 1, "max": 4}),
                 "output_format": (["jpeg", "png"], {"default": "png"}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -1887,7 +1912,10 @@ class ReveTextToImage:
         aspect_ratio="1:1",
         num_images=1,
         output_format="png",
+        aspect_ratio_override=None,
     ):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
         arguments = {
             "prompt": prompt,
             "aspect_ratio": aspect_ratio,

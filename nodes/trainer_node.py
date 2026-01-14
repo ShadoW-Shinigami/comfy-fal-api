@@ -303,6 +303,8 @@ class LtxVideoTrainerNode:
                     {"default": "1:1"},
                 ),
                 "validation_reverse": ("BOOLEAN", {"default": False}),
+                "aspect_ratio_override": ("STRING", {"forceInput": True}),
+                "validation_aspect_ratio_override": ("STRING", {"forceInput": True}),
             },
         }
 
@@ -330,7 +332,13 @@ class LtxVideoTrainerNode:
         validation_resolution="high",
         validation_aspect_ratio="1:1",
         validation_reverse=False,
+        aspect_ratio_override=None,
+        validation_aspect_ratio_override=None,
     ):
+        if aspect_ratio_override:
+            aspect_ratio = aspect_ratio_override
+        if validation_aspect_ratio_override:
+            validation_aspect_ratio = validation_aspect_ratio_override
         try:
             if not training_data_url:
                 return ApiHandler.handle_text_generation_error(
