@@ -1951,10 +1951,10 @@ class NanoBanana2:
 
         # Conditional endpoint routing based on whether ANY images provided
         if len(image_urls) > 0:
-            endpoint = "fal-ai/nano-banana-2/edit"
+            endpoint = "fal-ai/gemini-3.1-flash-image-preview/edit"
             arguments["image_urls"] = image_urls
         else:
-            endpoint = "fal-ai/nano-banana-2"
+            endpoint = "fal-ai/gemini-3.1-flash-image-preview"
             if aspect_ratio == "auto":
                 arguments["aspect_ratio"] = "1:1"
 
